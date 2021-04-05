@@ -1,0 +1,14 @@
+canvas {
+    border: 1px solid rgb(197, 241, 241);
+    background-image: url("images/525311.jpeg");
+    background-size: cover;
+
+}
+
+.start-button {
+    color: rgb(84, 197, 197);
+  }
+
+  .score{
+
+  }
