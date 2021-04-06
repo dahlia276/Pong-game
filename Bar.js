@@ -25,12 +25,12 @@ class Bar {
         switch(keyCode) {
             case 37: 
             if (this.x > 20) {
-                this.x -= 10;
+                this.x -= 50;
             }
             break;
             case 39: 
             if (this.x < 530) {
-                this.x += 10
+                this.x += 50
             }
             break;
         }

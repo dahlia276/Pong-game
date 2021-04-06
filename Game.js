@@ -6,5 +6,7 @@ class Game {
     constructor() {
         this.bar = {}
         this.ball = {}
+        this.score = 0;
+        this.gameOver = false;
     }
 }
