@@ -6,13 +6,19 @@ class Bar {
         this.y = 650;
         this.width = 120;
         this.height = 10;
+        this.bigger = false
     }
 
     draw() {
         context.fillStyle = '#00c4c9';
+        if(this.bigger) {
+            this.width = 200
+        } else {
+            this.width = 120
+        }
         context.fillRect(this.x, this.y, this.width, this.height);
     }
-    
+
     moveLeft() {
         this.x -= 45;
     }
