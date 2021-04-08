@@ -18,6 +18,12 @@ canvas {
     left: 608px;
 }
 
+#game-over {
+    position: absolute;
+    top: 320px;
+    left: 350px;
+}
+
   
 
   #game-board {
@@ -95,4 +101,12 @@ canvas {
     color: goldenrod;
     margin-left: 100px;
     margin-top: 9px;
+  }
+
+  #username {
+    margin-left: 42px;
+  }
+
+  .card-title-dalia{
+    margin-left: 35px;
   }

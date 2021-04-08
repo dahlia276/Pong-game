@@ -5,7 +5,14 @@ const context = canvas.getContext("2d");
 let currentGame
 let newBar
 let newBall
+let secondBall
 let animationId;
+const gameOverBtn = document.getElementById('game-over')
+gameOverBtn.style.display  = 'none'; 
+gameOverBtn.addEventListener('click', () => {
+    location.reload()
+})
+
 
 const startGame = document.getElementById('start-button')
 document.getElementById('start-button').style.display  = 'block';
@@ -14,8 +21,9 @@ startGame.addEventListener('click', () => {
      audio.play();
      currentGame = new Game()
      newBar = new Bar();
-     newBall = new Ball();
-    currentGame.ball = newBall
+     newBall = new Ball("#ffb499");
+    currentGame.balls.push(newBall)
+
     currentGame.bar = newBar
     updateCanvas()
     //button dissapear after game starts
@@ -29,25 +37,38 @@ document.addEventListener('keydown', (e) => {
 });
 
 //collision
+/*
 function detectCollision(newBar) {
     return !((currentGame.ball.x > newBar.x + newBar.width) ||
      (currentGame.ball.x + currentGame.ball.width < newBar.x) ||
      (currentGame.ball.y > newBar.y + newBar.height ))
     }
+*/
+function checkSecondLevel() {
+    if(currentGame.score === 60 && currentGame.balls.length < 2) {
+        secondBall = new Ball("#f9efb8");
+        currentGame.balls.push(secondBall)
+    }
+}
 
 
 //UPDATE CANVAS
+
 function updateCanvas() {
     context.clearRect(0, 0, canvas.width, canvas.height);
-    currentGame.ball.x += currentGame.ball.vx;
-    currentGame.ball.y += currentGame.ball.vy;
+    checkSecondLevel()
+    currentGame.balls.forEach(ball => {
+
+  
+   ball.x += ball.vx;
+    ball.y += ball.vy;
     //drop
-    if (currentGame.ball.y + currentGame.ball.vy > canvas.height ||
-         currentGame.ball.y > currentGame.bar.y && 
-         currentGame.ball.x > currentGame.bar.x && 
-         currentGame.ball.x < currentGame.bar.x + currentGame.bar.width  ) {
+    if (ball.y + ball.vy > canvas.height ||
+       ball.y > currentGame.bar.y && 
+         ball.x > currentGame.bar.x && 
+         ball.x < currentGame.bar.x + currentGame.bar.width  ) {
       cancelAnimationFrame(animationId);
-      currentGame.ball.y = 0;
+     ball.y = 0;
       let username = document.getElementById('username').value;
       localStorage.setItem(`${username}`, currentGame.score);
 
@@ -58,38 +79,63 @@ function updateCanvas() {
 
     }
     //top
-    if (currentGame.ball.y + currentGame.ball.vy < 0) {
-      currentGame.ball.vy *= -1;
+    if (ball.y + ball.vy < 0) {
+      ball.vy *= -1;
     }
     //bar
     if (
-      currentGame.ball.y + currentGame.ball.vy > currentGame.bar.y &&
-      currentGame.ball.x + currentGame.ball.vx > currentGame.bar.x &&
-      currentGame.ball.x + currentGame.ball.vx <
+     ball.y + ball.vy > currentGame.bar.y &&
+      ball.x + ball.vx > currentGame.bar.x &&
+      ball.x + ball.vx <
         currentGame.bar.x + currentGame.bar.width
     ) { //score
-      currentGame.ball.vy *= -1;
+      ball.vy *= -1;
       currentGame.score += 5;
       document.getElementById('score').innerText = currentGame.score;
     }
     //sides
     if (
-      currentGame.ball.x + currentGame.ball.vx > canvas.width ||
-      currentGame.ball.x + currentGame.ball.vx < 0
+      ball.x + ball.vx > canvas.width ||
+      ball.x + ball.vx < 0
     ) {
-      currentGame.ball.vx *= -1;
+      ball.vx *= -1;
     }
-    currentGame.ball.draw();
+   ball.draw();
     newBar.draw();
-    if (!currentGame.gameOver) {
-        animationId = requestAnimationFrame(updateCanvas);
-    }
+})
+
+if (!currentGame.gameOver) {
+    animationId = requestAnimationFrame(updateCanvas);
+}
     checkScore()
 }
 
+
+/*
+function updateCanvas() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+  //  checkSecondLevel()
+    currentGame.balls.forEach(ball => {
+
+  
+   ball.x += ball.vx;
+    ball.y += ball.vy;
+    
+   ball.draw();
+    newBar.draw();
+
+})
+
+if (!currentGame.gameOver) {
+    animationId = requestAnimationFrame(updateCanvas);
+}
+    checkScore()
+}
+*/
+
 function checkScore() {
     if(currentGame.score >= 50 && 
-        currentGame.score < 65) {
+        currentGame.score < 70) {
         currentGame.bar.bigger = true
     } else if(currentGame.score >= 65){
         currentGame.bar.bigger = false
